@@ -1,0 +1,26 @@
+p {
+  font-family: Lato;
+}
+
+.edit-trans {
+  animation: editTrans cubic-bezier(0.4, 0.0, 0.2, 1) .20s;
+}
+
+
+/* 
+  A little extra on these animations
+  Bezier brought over from material spec thoguh
+ */
+@keyframes editTrans{
+  0%{
+    opacity: 0;
+     transform: translateX(-2px)
+    }
+  80%{
+    opacity: .7;
+  }
+  100%{
+    transform: translateX(0px)
+  }
+}
+

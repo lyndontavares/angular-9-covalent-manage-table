@@ -1,0 +1,160 @@
+<mat-drawer-container fullscreen class="example-container">
+  <mat-drawer class="dark-theme" style="width:50px;height:100%;text-align: center;" layout="column" layout-align="start center" mode="side" opened>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon class="fill-deep-orange-300" svgIcon="assets:teradata-icon"></mat-icon>
+    </button>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>home</mat-icon>
+    </button>
+    <mat-divider class="push-sm"></mat-divider>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>code</mat-icon>
+    </button>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>list</mat-icon>
+    </button>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>folder</mat-icon>
+    </button>
+    <mat-divider class="push-sm"></mat-divider>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <span flex></span>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>help</mat-icon>
+    </button>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>person</mat-icon>
+    </button>
+    <button mat-icon-button class="push-top-xs push-bottom-xs">
+      <mat-icon>apps</mat-icon>
+    </button>
+    <mat-divider class="push-sm"></mat-divider>
+    <div layout="row" layout-align="end center">
+      <button mat-icon-button class="push-top-xs push-bottom-xs">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content class="bgc-contrast">
+    <td-layout-manage-list opened="true" mode="side">
+     <div td-sidenav-content class="pad-top-xs pad-bottom-xs pad-left-sm pad-right-sm mat-whiteframe-z1" layout="row" layout-align="start center">
+       <span flex>Object Storage</span>
+      <span>
+        <button mat-icon-button matTooltip="Add data" [mat-menu-trigger-for]="add">
+          <mat-icon>add</mat-icon>
+        </button>
+        <mat-menu xPosition="before" #add="matMenu">
+          <button mat-menu-item>
+            <span>New exploration</span>
+          </button>
+        </mat-menu>
+      </span>
+      <span>
+        <button mat-icon-button matTooltip="Sort" [mat-menu-trigger-for]="sort">
+          <mat-icon>sort</mat-icon>
+        </button>
+        <mat-menu xPosition="before" #sort="matMenu">
+          <button mat-menu-item>
+            <span>Sort by name asc</span>
+          </button>
+          <button mat-menu-item>
+            <span>Sort by name desc</span>
+          </button>
+          <button mat-menu-item>
+            <span>Sort by date asc</span>
+          </button>
+          <button mat-menu-item>
+            <span>Sort by date desc</span>
+          </button>
+        </mat-menu>
+      </span>
+     </div>
+     <mat-nav-list td-sidenav-content>
+       <a *ngFor="let item of routes" mat-list-item><mat-icon>grid_on</mat-icon>foreign_table_name</a>
+     </mat-nav-list>
+     <div class="mat-whiteframe-z1 pad-right" layout="row">
+       <nav mat-tab-nav-bar>
+        <a mat-tab-link class='text-upper' [active]='true'> Overview </a>
+        <a mat-tab-link class='text-upper'> Schema </a>
+        <a mat-tab-link class='text-upper'> SQL </a>
+      </nav>
+      <span flex></span>
+      <button mat-icon-button matTooltip="Action">
+        <mat-icon>add</mat-icon>
+      </button>
+     </div>
+
+     <div layout="row" layout-align="start center" [class.bgc-teal-900]='selectedRowNum'>
+       <ng-container *ngIf='!selectedRowNum'>
+        <div class='tc-grey-700 pad'>Table Title / Contextual Metadata / Search</div>
+       </ng-container>
+     
+      <!-- <span flex></span> -->
+      <div *ngIf='selectedRowNum' flex layout='row' layout-align='start center' class='edit-trans'>
+        <span flex class='pad tc-grey-700 push-right'>{{ selectedRowNum }} items selected</span>
+        <button mat-icon-button class='push-right-sm push-left-md'>
+         <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button>
+         <mat-icon>more_vert</mat-icon>
+        </button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+<table style="width:100%;background:none" mat-table [dataSource]="dataSource">
+
+  <!-- Checkbox Column -->
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [aria-label]="checkboxLabel()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef> No. </th>
+    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="weight">
+    <th mat-header-cell *matHeaderCellDef> Weight </th>
+    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="symbol">
+    <th mat-header-cell *matHeaderCellDef> Symbol </th>
+    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"
+      (click)="selection.toggle(row); consoleSelection()">
+  </tr>
+</table>
+   </td-layout-manage-list>
+  </mat-drawer-content>
+</mat-drawer-container>
